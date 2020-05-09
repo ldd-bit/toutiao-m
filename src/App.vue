@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <h1>黑马头条</h1>
-    <div class="box"></div>
+    <!-- <i class="toutiao toutiao-fenxiang"></i> -->
     <router-view/>
   </div>
 </template>
