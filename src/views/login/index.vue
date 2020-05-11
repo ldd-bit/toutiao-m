@@ -84,6 +84,8 @@ export default {
       })
       try {
         const res = await login(this.user)
+        // 登陆成功向vuex中保存token
+        this.$store.commit('setUser', res.data.data)
         this.$toast.success('登陆成功')
         console.log(res)
       } catch (err) {
