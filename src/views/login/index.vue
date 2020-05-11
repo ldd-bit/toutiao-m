@@ -11,11 +11,14 @@
     :show-error="false"
     :show-error-message="false"
     @failed="onfailed"
+    ref="countDown"
+    validate-first
   >
     <van-field
       v-model="user.mobile"
       icon-prefix="toutiao"
       left-icon="shouji"
+      name="mobile"
       placeholder="  请输入手机号"
       :rules="rules.mobile"
     />
@@ -23,11 +26,13 @@
       v-model="user.code"
       icon-prefix="toutiao"
       left-icon="yanzhengma"
+      name="code"
       placeholder="  请输入验证码"
       :rules="rules.code"
     >
       <template #button>
-        <van-button size="small" round class="send-code">发送验证码</van-button>
+        <van-count-down :time="time" format="ss s" v-if="isShow" @finish="isShow=false"/>
+        <van-button size="small" round class="send-code" @click.prevent="Start" v-else :loading="isLoading">发送验证码</van-button>
       </template>
     </van-field>
     <div class="login-btn">
@@ -38,7 +43,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, getCode } from '@/api/user'
 export default {
   name: 'LoginIndex',
   props: {},
@@ -49,6 +54,7 @@ export default {
         mobile: '',
         code: ''
       },
+      // 验证规则
       rules: {
         mobile: [
           { required: true, message: '请填写手机号' },
@@ -58,7 +64,10 @@ export default {
           { required: true, message: '请填写验证码' },
           { pattern: /^\d{6}$/, message: '验证码格式错误' }
         ]
-      }
+      },
+      time: 60 * 1000,
+      isShow: false,
+      isLoading: false
     }
   },
   computed: {},
@@ -82,9 +91,40 @@ export default {
         console.log(err)
       }
     },
+    // 验证失败时
     onfailed (err) {
       console.log(err)
-      this.$toast.fail(err.errors[0].message)
+      this.$toast({
+        message: err.errors[0].message,
+        position: 'top'
+      })
+    },
+    // 发送验证码时
+    async Start () {
+      // this.isShow = true
+      try {
+        await this.$refs.countDown.validate('mobile')
+        const res = await getCode(this.user.mobile)
+        // 发送验证码后开启倒计时
+        this.isLoading = true
+        this.isShow = true
+        console.log(res)
+        // console.log(res)
+      } catch (err) {
+        if (err && err.response && err.response.status === 429) {
+          // console.log(111)
+          this.$toast({
+            message: '获取验证码太频繁,请稍后重试',
+            position: 'top'
+          })
+        } else if (err && err.name === 'mobile') {
+          this.$toast({
+            message: err.message,
+            position: 'top'
+          })
+        }
+      }
+      this.isLoading = false
     }
   },
   created () {},
@@ -104,12 +144,16 @@ export default {
 }
 .send-code {
   width: 76px;
-  height: 23px;
+  height: 24px;
   background-color: #ededed;
   border: 0 none;
   .van-button__text {
     color: #666666;
     font-size: 11px;
   }
+}
+.send-code {
+  display: flex;
+  align-self: center;
 }
 </style>
