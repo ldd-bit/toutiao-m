@@ -6,27 +6,34 @@
     left-arrow
     @click-left="onClickLeft"
   />
-  <van-cell-group>
+  <van-form
+    @submit="onLogin"
+    :show-error="false"
+    :show-error-message="false"
+    @failed="onfailed"
+  >
     <van-field
       v-model="user.mobile"
       icon-prefix="toutiao"
       left-icon="shouji"
       placeholder="  请输入手机号"
+      :rules="rules.mobile"
     />
     <van-field
       v-model="user.code"
       icon-prefix="toutiao"
       left-icon="yanzhengma"
       placeholder="  请输入验证码"
+      :rules="rules.code"
     >
       <template #button>
         <van-button size="small" round class="send-code">发送验证码</van-button>
       </template>
     </van-field>
     <div class="login-btn">
-      <van-button @click="onLogin" type="info" block class="login-btn-wrap">登录</van-button>
+      <van-button type="info" block class="login-btn-wrap">登录</van-button>
     </div>
-  </van-cell-group>
+  </van-form>
 </div>
 </template>
 
@@ -41,6 +48,16 @@ export default {
       user: {
         mobile: '',
         code: ''
+      },
+      rules: {
+        mobile: [
+          { required: true, message: '请填写手机号' },
+          { pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '手机号格式错误' }
+        ],
+        code: [
+          { required: true, message: '请填写验证码' },
+          { pattern: /^\d{6}$/, message: '验证码格式错误' }
+        ]
       }
     }
   },
@@ -51,12 +68,23 @@ export default {
     onClickLeft () {},
     // 登录
     async onLogin () {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
       try {
         const res = await login(this.user)
+        this.$toast.success('登陆成功')
         console.log(res)
       } catch (err) {
+        this.$toast.fail('登陆失败')
         console.log(err)
       }
+    },
+    onfailed (err) {
+      console.log(err)
+      this.$toast.fail(err.errors[0].message)
     }
   },
   created () {},
