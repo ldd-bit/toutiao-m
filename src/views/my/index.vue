@@ -7,9 +7,9 @@
         fit="cover"
         slot="icon"
         round
-        src="https://img.yzcdn.cn/vant/cat.jpeg"
+        :src="currentInfo.photo"
       />
-      <div slot="title" class="nickName">昵称</div>
+      <div slot="title" class="nickName">{{ currentInfo.name }}</div>
       <van-button
         class="changeInfo"
         type="default"
@@ -21,19 +21,19 @@
     </van-cell>
     <van-grid class="countMsg" :border="false">
       <van-grid-item class="countCenter">
-        <span class="count">123</span>
+        <span class="count">{{ currentInfo.art_count }}</span>
         <span class="text">头条</span>
       </van-grid-item>
       <van-grid-item class="countCenter">
-        <span class="count">123</span>
+        <span class="count">{{ currentInfo.fans_count }}</span>
         <span class="text">粉丝</span>
       </van-grid-item>
       <van-grid-item class="countCenter">
-        <span class="count">123</span>
+        <span class="count">{{ currentInfo.follow_count }}</span>
         <span class="text">关注</span>
       </van-grid-item>
       <van-grid-item class="countCenter">
-        <span class="count">123</span>
+        <span class="count">{{ currentInfo.like_count }}</span>
         <span class="text">获赞</span>
       </van-grid-item>
     </van-grid>
@@ -49,20 +49,29 @@
 </template>
 
 <script>
-
+import { getMyInfo } from '@/api/user'
 export default {
   name: 'MyIndex',
   props: {},
   components: {},
   data () {
     return {
+      currentInfo: {}
     }
   },
   computed: {},
   watch: {},
   // 方法集合
-  methods: {},
-  created () {},
+  methods: {
+    async getPersonInfo () {
+      const res = await getMyInfo()
+      this.currentInfo = res.data.data
+      // console.log(res)
+    }
+  },
+  created () {
+    this.getPersonInfo()
+  },
   mounted () {}
 }
 </script>

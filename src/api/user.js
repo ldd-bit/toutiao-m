@@ -15,3 +15,11 @@ export const getCode = data => {
     url: `/app/v1_0/sms/codes/${data}`
   })
 }
+
+// 获取指定用户信息
+export const getMyInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user'
+  })
+}
