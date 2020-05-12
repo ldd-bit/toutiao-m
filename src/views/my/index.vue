@@ -40,13 +40,17 @@
   </van-cell-group>
   <van-cell-group class="bgcImage noLogin" center v-else>
     <!-- <van-cell center class="perInfo" :border="false"> -->
-       <van-image
+      <div class="imgNotInfo">
+      </div>
+       <!-- <van-image
         class="imgNotInfo"
         fit="cover"
+        icon-prefix="toutiao"
+        icon="shouji"
         round
         src="./banner.png"
         @click="$router.push('/login')"
-      />
+      /> -->
       <span class="noLoginTitle">登录/注册</span>
   </van-cell-group>
   <van-grid :column-num="2" class="marBotttom4px">
@@ -159,6 +163,7 @@ export default {
       // box-sizing: border-box;
       margin-bottom: 6px;
       background: url(./touxiang.png);
+      background-size: cover;
     }
     .noLoginTitle {
       font-size: 14px;
