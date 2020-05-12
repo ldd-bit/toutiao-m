@@ -74,7 +74,9 @@ export default {
   watch: {},
   // 方法集合
   methods: {
-    onClickLeft () {},
+    onClickLeft () {
+      this.$router.back()
+    },
     // 登录
     async onLogin () {
       this.$toast.loading({
@@ -84,7 +86,6 @@ export default {
       })
       try {
         const res = await login(this.user)
-        // 返回上一页
         this.$router.back()
         // 登陆成功向vuex中保存token
         this.$store.commit('setUser', res.data.data)

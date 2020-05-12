@@ -1,7 +1,7 @@
 <template>
 <div class='my-container'>
-  <van-cell-group class="bgcImage">
-    <van-cell title="单元格" value="内容" center class="perInfo" :border="false">
+  <van-cell-group class="bgcImage" v-if="user">
+    <van-cell center class="perInfo" :border="false">
       <van-image
         class="imgInfo"
         fit="cover"
@@ -38,18 +38,30 @@
       </van-grid-item>
     </van-grid>
   </van-cell-group>
+  <van-cell-group class="bgcImage noLogin" center v-else>
+    <!-- <van-cell center class="perInfo" :border="false"> -->
+       <van-image
+        class="imgNotInfo"
+        fit="cover"
+        round
+        src="./banner.png"
+        @click="$router.push('/login')"
+      />
+      <span class="noLoginTitle">登录/注册</span>
+  </van-cell-group>
   <van-grid :column-num="2" class="marBotttom4px">
     <van-grid-item icon-prefix="toutiao" icon="shoucang" text="收藏" />
     <van-grid-item icon-prefix="toutiao" icon="lishi" text="历史" />
   </van-grid>
   <van-cell title="消息通知" is-link />
   <van-cell title="小智同学" is-link class="marBotttom4px"/>
-  <van-cell title="退出登录" class="titleCenter"/>
+  <van-cell title="退出登录" v-if="user" class="titleCenter" @click="exitLogin"/>
 </div>
 </template>
 
 <script>
 import { getMyInfo } from '@/api/user'
+import { mapState } from 'vuex'
 export default {
   name: 'MyIndex',
   props: {},
@@ -59,7 +71,9 @@ export default {
       currentInfo: {}
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   // 方法集合
   methods: {
@@ -67,6 +81,19 @@ export default {
       const res = await getMyInfo()
       this.currentInfo = res.data.data
       // console.log(res)
+    },
+    // 退出登录操作
+    exitLogin () {
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '您确定要退出吗?'
+      })
+        .then(() => {
+          this.$store.commit('setUser', '')
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   },
   created () {
@@ -78,6 +105,7 @@ export default {
 <style lang='less' scoped>
 .my-container {
   .bgcImage {
+    height: 180px;
     background-image: url(./banner.png);
     background-size: cover;
     .perInfo {
@@ -116,6 +144,25 @@ export default {
           }
         }
       }
+    }
+  }
+  .noLogin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding-top: 54px;
+    // 未登录样式
+    .imgNotInfo {
+      width: 66px;
+      height: 66px;
+      // box-sizing: border-box;
+      margin-bottom: 6px;
+      background: url(./touxiang.png);
+    }
+    .noLoginTitle {
+      font-size: 14px;
+      color: white;
     }
   }
   .marBotttom4px {
