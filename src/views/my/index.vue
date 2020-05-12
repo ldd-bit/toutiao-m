@@ -40,7 +40,7 @@
   </van-cell-group>
   <van-cell-group class="bgcImage noLogin" center v-else>
     <!-- <van-cell center class="perInfo" :border="false"> -->
-      <div class="imgNotInfo">
+      <div class="imgNotInfo" @click="$router.push('/login')">
       </div>
        <!-- <van-image
         class="imgNotInfo"
