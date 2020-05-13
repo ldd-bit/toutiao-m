@@ -32,7 +32,7 @@ export default {
   methods: {
     async getUserChannel () {
       const { data } = await getchannels()
-      console.log(data)
+      // console.log(data)
       this.channels = data.data.channels
     }
   },
