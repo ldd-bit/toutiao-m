@@ -11,7 +11,9 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell v-for="(item,i) in artlcleList" :key="i" :title="item.title" />
+      <van-cell v-for="(item,i) in artlcleList" :key="i">
+        <article-item :articleItem="item"></article-item>
+      </van-cell>
     </van-list>
   </van-pull-refresh>
 </div>
@@ -19,6 +21,7 @@
 
 <script>
 import { getArticleList } from '@/api/article'
+import ArticleItem from '@/components/article-item'
 export default {
   name: 'articleList',
   props: {
@@ -27,7 +30,9 @@ export default {
       required: true
     }
   },
-  components: {},
+  components: {
+    ArticleItem
+  },
   data () {
     return {
       artlcleList: [], // 文章列表
