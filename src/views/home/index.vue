@@ -4,8 +4,8 @@
     <van-button type="danger" slot="title" class="searchInfo" icon="search" round>搜索</van-button>
   </van-nav-bar>
   <van-tabs v-model="active">
-    <van-tab :title="item.name" v-for="item in channels" :key="item.id">
-      <article-list></article-list>
+    <van-tab :title="item.name" v-for="item in channels" :key="item.id" class="tab">
+      <article-list :channel="item" class="fixed"></article-list>
     </van-tab>
   </van-tabs>
 </div>
@@ -44,14 +44,24 @@ export default {
 </script>
 <style lang='less' scoped>
 .home-container {
-  /deep/ .van-nav-bar__title{
-    max-width: unset;
-    .searchInfo {
-      width: 277px;
-      height: 32px;
-      background-color: #5babfb;
-      border: 0 none;
+  .app-nav-bar {
+    /deep/ .van-nav-bar__title{
+      max-width: unset;
+      .searchInfo {
+        width: 277px;
+        height: 32px;
+        background-color: #5babfb;
+        border: 0 none;
+      }
     }
+  }
+  .fixed {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    overflow-y: auto;
   }
 }
 </style>
