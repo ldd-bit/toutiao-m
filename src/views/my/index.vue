@@ -1,6 +1,6 @@
 <template>
 <div class='my-container'>
-  <van-cell-group class="bgcImage" v-if="user">
+  <van-cell-group class="bgcImage" v-if="user && currentInfo">
     <van-cell center class="perInfo" :border="false">
       <van-image
         class="imgInfo"
@@ -42,15 +42,6 @@
     <!-- <van-cell center class="perInfo" :border="false"> -->
       <div class="imgNotInfo" @click="$router.push('/login')">
       </div>
-       <!-- <van-image
-        class="imgNotInfo"
-        fit="cover"
-        icon-prefix="toutiao"
-        icon="shouji"
-        round
-        src="./banner.png"
-        @click="$router.push('/login')"
-      /> -->
       <span class="noLoginTitle">登录/注册</span>
   </van-cell-group>
   <van-grid :column-num="2" class="marBotttom4px">
@@ -59,7 +50,7 @@
   </van-grid>
   <van-cell title="消息通知" is-link />
   <van-cell title="小智同学" is-link class="marBotttom4px"/>
-  <van-cell title="退出登录" v-if="user" class="titleCenter" @click="exitLogin"/>
+  <van-cell title="退出登录" v-if="user && currentInfo" class="titleCenter" @click="exitLogin"/>
 </div>
 </template>
 
@@ -101,7 +92,10 @@ export default {
     }
   },
   created () {
-    this.getPersonInfo()
+    // 判断如果有user就发送请求
+    if (this.user) {
+      this.getPersonInfo()
+    }
   },
   mounted () {}
 }

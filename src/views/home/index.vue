@@ -4,34 +4,41 @@
     <van-button type="danger" slot="title" class="searchInfo" icon="search" round>搜索</van-button>
   </van-nav-bar>
   <van-tabs v-model="active">
-    <van-tab title="标签 1">内容 1</van-tab>
-    <van-tab title="标签 2">内容 2</van-tab>
-    <van-tab title="标签 3">内容 3</van-tab>
-    <van-tab title="标签 4">内容 4</van-tab>
-    <van-tab title="标签 4">内容 5</van-tab>
-    <van-tab title="标签 4">内容 6</van-tab>
-    <van-tab title="标签 4">内容 7</van-tab>
-    <van-tab title="标签 4">内容 8</van-tab>
+    <van-tab :title="item.name" v-for="item in channels" :key="item.id">
+      <article-list></article-list>
+    </van-tab>
   </van-tabs>
 </div>
 </template>
 
 <script>
-
+import { getchannels } from '@/api/user'
+import ArticleList from './components/article-list'
 export default {
   name: 'HomeIndex',
   props: {},
-  components: {},
+  components: {
+    ArticleList
+  },
   data () {
     return {
-      active: 0
+      active: 0,
+      channels: []
     }
   },
   computed: {},
   watch: {},
   // 方法集合
-  methods: {},
-  created () {},
+  methods: {
+    async getUserChannel () {
+      const { data } = await getchannels()
+      console.log(data)
+      this.channels = data.data.channels
+    }
+  },
+  created () {
+    this.getUserChannel()
+  },
   mounted () {}
 }
 </script>
