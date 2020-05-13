@@ -15,7 +15,7 @@
       <div>
         <span>{{articleItem.aut_name}}</span>
         <span>{{articleItem.comm_count}}评论</span>
-        <span>{{articleItem.pubdate}}</span>
+        <span>{{articleItem.pubdate | relativeTime}}</span>
       </div>
     </div>
     <van-image
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'articleItem',
   props: {
