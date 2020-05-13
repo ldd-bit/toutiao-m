@@ -4,7 +4,7 @@
     <van-button type="danger" slot="title" class="searchInfo" icon="search" round>搜索</van-button>
   </van-nav-bar>
   <van-tabs v-model="active">
-    <van-tab :title="item.name" v-for="item in channels" :key="item.id" class="tab">
+    <van-tab :title="item.name" v-for="item in channels" :key="item.id">
       <article-list :channel="item" class="fixed"></article-list>
     </van-tab>
   </van-tabs>
@@ -62,6 +62,16 @@ export default {
     right: 0;
     bottom: 50px;
     overflow-y: auto;
+  }
+  /deep/ .van-tab {
+    border-right: 1px solid #edeff3;
+    border-bottom: 1px solid #edeff3;
+  }
+  /deep/ .van-tabs__line {
+    width: 15px !important;
+    height: 3px;
+    margin-bottom: 5px;
+    background-color: #3296fa;
   }
 }
 </style>
