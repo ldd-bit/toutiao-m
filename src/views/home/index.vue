@@ -8,6 +8,15 @@
       <article-list :channel="item" class="fixed"></article-list>
     </van-tab>
   </van-tabs>
+  <van-popup
+    v-model="channelShow"
+    position="bottom"
+    :style="{ height: '100%' }"
+    closeable
+    close-icon-position="top-left"
+    round
+    get-container="body"
+  />
 </div>
 </template>
 
@@ -23,7 +32,8 @@ export default {
   data () {
     return {
       active: 0,
-      channels: []
+      channels: [],
+      channelShow: false
     }
   },
   computed: {},
