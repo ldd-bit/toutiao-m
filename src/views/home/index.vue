@@ -7,6 +7,17 @@
     <van-tab :title="item.name" v-for="item in channels" :key="item.id">
       <article-list :channel="item" class="fixed"></article-list>
     </van-tab>
+    <div slot="nav-right" class="noContainer">
+    </div>
+    <div slot="nav-right" class="navRight">
+      <van-image
+        width="1px"
+        height="44px"
+        fit="contain"
+        :src="require('./border.png')"
+      />
+      <van-icon name="wap-nav" class="wapNav"/>
+    </div>
   </van-tabs>
   <van-popup
     v-model="channelShow"
@@ -82,6 +93,23 @@ export default {
     height: 3px;
     margin-bottom: 5px;
     background-color: #3296fa;
+  }
+  .noContainer {
+    width: 35px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .navRight {
+    display: flex;
+    position: fixed;
+    right: 0;
+    height: 44px;
+    background-color: rgba(255, 255, 255, .8);
+    .wapNav {
+      font-size: 24px;
+      line-height: 44px;
+      margin: 0 5px;
+    }
   }
 }
 </style>
