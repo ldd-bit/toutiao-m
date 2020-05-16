@@ -9,7 +9,7 @@
     </van-tab>
     <div slot="nav-right" class="noContainer">
     </div>
-    <div slot="nav-right" class="navRight">
+    <div slot="nav-right" class="navRight" @click="channelShow=true">
       <van-image
         width="1px"
         height="44px"
@@ -27,18 +27,22 @@
     close-icon-position="top-left"
     round
     get-container="body"
-  />
+  >
+  <channel-list :channel="channels" @active="active1($event)" :active="active" @show="show($event)"></channel-list>
+  </van-popup>
 </div>
 </template>
 
 <script>
 import { getchannels } from '@/api/user'
 import ArticleList from './components/article-list'
+import ChannelList from './components/channel-list'
 export default {
   name: 'HomeIndex',
   props: {},
   components: {
-    ArticleList
+    ArticleList,
+    ChannelList
   },
   data () {
     return {
@@ -55,6 +59,12 @@ export default {
       const { data } = await getchannels()
       // console.log(data)
       this.channels = data.data.channels
+    },
+    active1 (data) {
+      this.active = data
+    },
+    show (data) {
+      this.channelShow = data
     }
   },
   created () {
