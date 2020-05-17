@@ -1,36 +1,36 @@
 <template>
-<div class='home-container'>
-  <van-nav-bar class="app-nav-bar">
-    <van-button type="danger" slot="title" class="searchInfo" icon="search" round>搜索</van-button>
-  </van-nav-bar>
-  <van-tabs v-model="active">
-    <van-tab :title="item.name" v-for="item in channels" :key="item.id">
-      <article-list :channel="item" class="fixed"></article-list>
-    </van-tab>
-    <div slot="nav-right" class="noContainer">
-    </div>
-    <div slot="nav-right" class="navRight" @click="channelShow=true">
-      <van-image
-        width="1px"
-        height="44px"
-        fit="contain"
-        :src="require('./border.png')"
-      />
-      <van-icon name="wap-nav" class="wapNav"/>
-    </div>
-  </van-tabs>
-  <van-popup
-    v-model="channelShow"
-    position="bottom"
-    :style="{ height: '100%' }"
-    closeable
-    close-icon-position="top-left"
-    round
-    get-container="body"
-  >
-  <channel-list :channel="channels" @active="active1($event)" :active="active" @show="show($event)"></channel-list>
-  </van-popup>
-</div>
+  <div class="home-container">
+    <van-nav-bar class="app-nav-bar">
+      <van-button type="danger" slot="title" class="searchInfo" icon="search" round>搜索</van-button>
+    </van-nav-bar>
+    <van-tabs v-model="active">
+      <van-tab :title="item.name" v-for="item in channels" :key="item.id">
+        <article-list :channel="item" class="fixed"></article-list>
+      </van-tab>
+      <div slot="nav-right" class="noContainer"></div>
+      <div slot="nav-right" class="navRight" @click="channelShow=true">
+        <van-image width="1px" height="44px" fit="contain" :src="require('./border.png')" />
+        <van-icon name="wap-nav" class="wapNav" />
+      </div>
+    </van-tabs>
+    <van-popup
+      v-model="channelShow"
+      position="bottom"
+      :style="{ height: '100%' }"
+      closeable
+      close-icon-position="top-left"
+      round
+      get-container="body"
+    >
+      <channel-list
+        :channel="channels"
+        @active="active1($event)"
+        :active="active"
+        @show="show($event)"
+        :channelShow="channelShow"
+      ></channel-list>
+    </van-popup>
+  </div>
 </template>
 
 <script>
@@ -52,7 +52,15 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    EditClosed: {
+      handler (newval, old) {
+        this.edit = !newval
+      }
+    },
+    immediate: true,
+    deep: true
+  },
   // 方法集合
   methods: {
     async getUserChannel () {
@@ -76,7 +84,7 @@ export default {
 <style lang='less' scoped>
 .home-container {
   .app-nav-bar {
-    /deep/ .van-nav-bar__title{
+    /deep/ .van-nav-bar__title {
       max-width: unset;
       .searchInfo {
         width: 277px;
@@ -114,7 +122,7 @@ export default {
     position: fixed;
     right: 0;
     height: 44px;
-    background-color: rgba(255, 255, 255, .8);
+    background-color: rgba(255, 255, 255, 0.8);
     .wapNav {
       font-size: 24px;
       line-height: 44px;

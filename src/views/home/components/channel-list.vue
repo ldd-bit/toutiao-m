@@ -6,13 +6,13 @@
       <span class="myChannelRight">点击进入频道</span>
     </template>
     <template #right>
-      <van-button type="warning" plain size="mini" round @click="isEdit = !isEdit">{{isEdit? '完成' : '编辑'}}</van-button>
+      <van-button type="warning" plain size="mini" round @click="Edit = !Edit">{{Edit? '完成' : '编辑'}}</van-button>
     </template>
   </van-nav-bar>
   <van-grid class="channelList">
-    <van-grid-item class="channelItem" v-for="(item,i) in channel" :key="i" @click="isEdit === true? delChannel(i) : jumpChannel(i)">
+    <van-grid-item class="channelItem" v-for="(item,i) in channel" :key="i" @click="Edit === true? delChannel(i) : jumpChannel(i)">
       <span slot="text" class="textFont" :class="{activeItem : i === active}">{{item.name}}</span>
-      <van-icon slot="icon" name="close" class="close" v-if="isEdit === true && i !==0"/>
+      <van-icon slot="icon" name="close" class="close" v-if="Edit === true && i !==0"/>
     </van-grid-item>
   </van-grid>
   <van-nav-bar>
@@ -31,6 +31,8 @@
 import {
   getAllChannels
 } from '@/api/user'
+import { mapState } from 'vuex'
+// import { editUserChannel } from '@/api/user'
 export default {
   name: 'channelList',
   props: {
@@ -41,13 +43,17 @@ export default {
     active: {
       type: Number,
       required: true
+    },
+    channelShow: {
+      type: Boolean,
+      required: true
     }
   },
   components: {},
   data () {
     return {
       allChannels: [],
-      isEdit: false
+      Edit: false
     }
   },
   computed: {
@@ -57,24 +63,36 @@ export default {
           return item.id === data.id
         })
       })
+    },
+    ...mapState(['user'])
+  },
+  watch: {
+    channelShow: {
+      handler: function (val, oldVal) {
+        // console.log(val, oldVal)
+        if (val === false) {
+          this.Edit = val
+        }
+      },
+      immediate: true
     }
   },
-  watch: {},
   // 方法集合
   methods: {
     // 获取推荐频道
     async loadChannels () {
+      this.isEdit = false
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
     },
     // 添加用户频道
     async addChannel (item) {
-      // const res = await editUserChannel({
-      //   id: id,
-      //   seq: `${this.allChannels.length}+1`
-      // })
-      // console.log(res)
       this.channel.push(item)
+      if (this.user) {
+        // console.log(111)
+        // const res = await editUserChannel({
+        // })
+      }
     },
     async delChannel (index) {
       if (index === 0) {
@@ -86,8 +104,14 @@ export default {
       this.channel.splice(index, 1)
     },
     // 跳转页面,选中频道
+    // 官方文档解释：注意在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变变更这个对象或数组本身将会影响到父组件的状态。
+    // props 数据如果是引用类型（对象、数组）可以修改它的内部数据，例如下面这样：
+    // obj.a = 123
+    // arr.push(123)
+    // 但是要注意的是任何 props 数据都不能重新赋值：xxx = xxx，无论它是什么类型。
     jumpChannel (active) {
       this.$emit('active', active)
+      // this.active = active
       this.$emit('show', false)
     }
   },
