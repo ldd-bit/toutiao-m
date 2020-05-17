@@ -11,7 +11,7 @@
     @focus="isSearch=false"
   />
   <search-result v-if="isSearch"/>
-  <search-associate v-else-if="articleText"/>
+  <search-associate v-else-if="articleText" :articleText="articleText"/>
   <search-history v-else/>
 </div>
 </template>
