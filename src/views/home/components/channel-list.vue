@@ -10,7 +10,7 @@
     </template>
   </van-nav-bar>
   <van-grid class="channelList">
-    <van-grid-item class="channelItem" v-for="(item,i) in channel" :key="i" @click="Edit === true? delChannel(i) : jumpChannel(i)">
+    <van-grid-item class="channelItem" v-for="(item,i) in channel" :key="i" @click="Edit === true? delChannel(item, i) : jumpChannel(i)">
       <span slot="text" class="textFont" :class="{activeItem : i === active}">{{item.name}}</span>
       <van-icon slot="icon" name="close" class="close" v-if="Edit === true && i !==0"/>
     </van-grid-item>
@@ -28,11 +28,9 @@
 </template>
 
 <script>
-import {
-  getAllChannels
-} from '@/api/user'
+import { getAllChannels, editUserChannel, deleteUserChannel } from '@/api/user'
 import { mapState } from 'vuex'
-// import { editUserChannel } from '@/api/user'
+import { setToken } from '@/utils/storage'
 export default {
   name: 'channelList',
   props: {
@@ -89,12 +87,17 @@ export default {
     async addChannel (item) {
       this.channel.push(item)
       if (this.user) {
-        // console.log(111)
-        // const res = await editUserChannel({
-        // })
+        await editUserChannel({
+          channels: [
+            { id: item.id, seq: this.channel.length }
+          ]
+        })
+        // console.log(res)
+      } else {
+        setToken('my-channels', this.channel)
       }
     },
-    async delChannel (index) {
+    async delChannel (item, index) {
       if (index === 0) {
         return
       }
@@ -102,6 +105,14 @@ export default {
         this.$emit('active', this.active - 1)
       }
       this.channel.splice(index, 1)
+      if (this.user) {
+        await deleteUserChannel(
+          item.id
+        )
+        // console.log(res)
+      } else {
+        setToken('my-channels', this.channel)
+      }
     },
     // 跳转页面,选中频道
     // 官方文档解释：注意在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变变更这个对象或数组本身将会影响到父组件的状态。

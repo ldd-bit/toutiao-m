@@ -37,6 +37,8 @@
 import { getchannels } from '@/api/user'
 import ArticleList from './components/article-list'
 import ChannelList from './components/channel-list'
+import { mapState } from 'vuex'
+import { getToken } from '@/utils/storage'
 export default {
   name: 'HomeIndex',
   props: {},
@@ -51,7 +53,9 @@ export default {
       channelShow: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {
     EditClosed: {
       handler (newval, old) {
@@ -64,9 +68,17 @@ export default {
   // 方法集合
   methods: {
     async getUserChannel () {
-      const { data } = await getchannels()
-      // console.log(data)
-      this.channels = data.data.channels
+      if (this.user) {
+        const { data } = await getchannels()
+        this.channels = data.data.channels
+      } else {
+        if (getToken('my-channels')) {
+          this.channels = getToken('my-channels')
+        } else {
+          const { data } = await getchannels()
+          this.channels = data.data.channels
+        }
+      }
     },
     active1 (data) {
       this.active = data

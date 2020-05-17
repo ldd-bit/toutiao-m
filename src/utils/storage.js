@@ -11,6 +11,7 @@ export const getToken = user => {
     return data
   }
 }
+
 // 设置本地存储token
 export const setToken = (user, data) => {
   if (typeof data === 'object') {
@@ -18,6 +19,7 @@ export const setToken = (user, data) => {
   }
   window.localStorage.setItem(user, data)
 }
+
 // 移除本地存储token
 export const removeToken = user => {
   return window.localStorage.removeItem(user)

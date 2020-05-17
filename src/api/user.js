@@ -48,3 +48,11 @@ export const editUserChannel = data => {
     data
   })
 }
+
+// 删除用户频道
+export const deleteUserChannel = id => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/user/channels/${id}`
+  })
+}
