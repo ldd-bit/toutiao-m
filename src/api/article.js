@@ -17,3 +17,12 @@ export const getSuggestion = params => {
     params
   })
 }
+
+// 获取搜索结果
+export const getSearchResult = params => {
+  return request({
+    methods: 'GET',
+    url: '/app/v1_0/search',
+    params
+  })
+}

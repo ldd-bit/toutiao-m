@@ -1,7 +1,7 @@
 <template>
 <div class='search-associate'>
   <van-cell-group>
-    <van-cell icon="search" v-for="(item,index) in associate" :key="index">
+    <van-cell icon="search" v-for="(item,index) in associate" :key="index" @click="$emit('item', item)">
       <div slot="title" v-html="heightLight(item)"></div>
     </van-cell>
   </van-cell-group>
@@ -33,6 +33,7 @@ export default {
           q: this.articleText
         })
         this.associate = data.data.options
+        console.log(this)
       }, 200),
       immediate: true
     }

@@ -10,8 +10,8 @@
     @cancel="$router.back()"
     @focus="isSearch=false"
   />
-  <search-result v-if="isSearch"/>
-  <search-associate v-else-if="articleText" :articleText="articleText"/>
+  <search-result v-if="isSearch" :articleText="articleText"/>
+  <search-associate v-else-if="articleText" :articleText="articleText" @item="fn($event)"/>
   <search-history v-else/>
 </div>
 </template>
@@ -39,6 +39,11 @@ export default {
   // 方法集合
   methods: {
     onSearch (val) {
+      this.isSearch = true
+    },
+    // 接收到联想建议传来的数据
+    fn (item) {
+      this.articleText = item
       this.isSearch = true
     }
   },
