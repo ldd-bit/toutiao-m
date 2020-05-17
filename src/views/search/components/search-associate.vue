@@ -10,6 +10,7 @@
 
 <script>
 import { getSuggestion } from '@/api/article'
+import { debounce } from 'lodash'
 export default {
   name: 'searchAssociate',
   props: {
@@ -27,12 +28,12 @@ export default {
   computed: {},
   watch: {
     articleText: {
-      async handler () {
+      handler: debounce(async function () {
         const { data } = await getSuggestion({
           q: this.articleText
         })
         this.associate = data.data.options
-      },
+      }, 200),
       immediate: true
     }
   },
