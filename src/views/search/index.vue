@@ -11,8 +11,8 @@
     @focus="isSearch=false"
   />
   <search-result v-if="isSearch" :articleText="articleText"/>
-  <search-associate v-else-if="articleText" :articleText="articleText" @item="fn($event)"/>
-  <search-history v-else/>
+  <search-associate v-else-if="articleText" :articleText="articleText" @item="onSearch($event)"/>
+  <search-history v-else :history="history"/>
 </div>
 </template>
 
@@ -31,7 +31,8 @@ export default {
   data () {
     return {
       articleText: '',
-      isSearch: false
+      isSearch: false,
+      history: []
     }
   },
   computed: {},
@@ -39,12 +40,16 @@ export default {
   // 方法集合
   methods: {
     onSearch (val) {
+      this.articleText = val
       this.isSearch = true
-    },
-    // 接收到联想建议传来的数据
-    fn (item) {
-      this.articleText = item
-      this.isSearch = true
+      // 数组去重
+      const index = this.history.indexOf(val)
+      if (index === -1) {
+        this.history.unshift(val)
+      } else {
+        this.history.splice(index, 1)
+        this.history.unshift(val)
+      }
     }
   },
   created () {},

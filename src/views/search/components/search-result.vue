@@ -28,7 +28,8 @@ export default {
       loading: false,
       finished: false,
       page: 1,
-      per_page: 10
+      per_page: 10,
+      history: []
     }
   },
   computed: {},

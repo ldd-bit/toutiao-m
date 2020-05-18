@@ -4,7 +4,7 @@
     <van-cell title="历史记录">
       <van-icon name="delete" />
     </van-cell>
-    <van-cell title="单元格1">
+    <van-cell :title="item" v-for="(item,i) in history" :key="i">
       <van-icon name="close" />
     </van-cell>
   </van-cell-group>
@@ -15,7 +15,12 @@
 
 export default {
   name: 'searchHistory',
-  props: {},
+  props: {
+    history: {
+      type: Array,
+      required: true
+    }
+  },
   components: {},
   data () {
     return {

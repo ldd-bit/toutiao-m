@@ -33,7 +33,7 @@ export default {
           q: this.articleText
         })
         this.associate = data.data.options
-        console.log(this)
+        // console.log(this)
       }, 200),
       immediate: true
     }
