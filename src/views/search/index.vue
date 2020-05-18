@@ -12,7 +12,7 @@
   />
   <search-result v-if="isSearch" :articleText="articleText"/>
   <search-associate v-else-if="articleText" :articleText="articleText" @item="onSearch($event)"/>
-  <search-history v-else :history="history" @deleteAll="deleteHistoryAll"/>
+  <search-history v-else :history="history" @deleteAll="deleteHistoryAll" @onSearch="onSearch"/>
 </div>
 </template>
 

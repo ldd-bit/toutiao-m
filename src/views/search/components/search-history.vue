@@ -8,8 +8,8 @@
       </div>
       <van-icon name="delete" v-else @click="isDelete = true"/>
     </van-cell>
-    <van-cell :title="item" v-for="(item,i) in history" :key="i">
-      <van-icon name="close" v-show="isDelete" @click="isDelete?deleteHistory(i):jumpList"/>
+    <van-cell :title="item" v-for="(item,i) in history" :key="i" @click="isDelete?deleteHistory(i):jumpList(item)">
+      <van-icon name="close" v-show="isDelete"/>
     </van-cell>
   </van-cell-group>
 </div>
@@ -46,6 +46,11 @@ export default {
     deleteHistory (index) {
       this.history.splice(index, 1)
       // console.log(index)
+    },
+    // 点击历史记录跳转到搜索结果页面
+    jumpList (data) {
+      // console.log(111)
+      this.$emit('onSearch', data)
     }
   },
   created () {},
