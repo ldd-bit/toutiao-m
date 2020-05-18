@@ -12,7 +12,7 @@
   />
   <search-result v-if="isSearch" :articleText="articleText"/>
   <search-associate v-else-if="articleText" :articleText="articleText" @item="onSearch($event)"/>
-  <search-history v-else :history="history"/>
+  <search-history v-else :history="history" @deleteAll="deleteHistoryAll"/>
 </div>
 </template>
 
@@ -20,6 +20,9 @@
 import SearchHistory from './components/search-history'
 import SearchResult from './components/search-result'
 import SearchAssociate from './components/search-associate'
+import { mapState } from 'vuex'
+import { deleteSearchHistory } from '@/api/article'
+import { getToken } from '@/utils/storage'
 export default {
   name: 'searchIndex',
   props: {},
@@ -35,11 +38,13 @@ export default {
       history: []
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   // 方法集合
   methods: {
-    onSearch (val) {
+    async onSearch (val) {
       this.articleText = val
       this.isSearch = true
       // 数组去重
@@ -50,9 +55,30 @@ export default {
         this.history.splice(index, 1)
         this.history.unshift(val)
       }
+      // setToken('search-history', this.history)
+    },
+    async loadHistory () {
+      const searchHistory = getToken('search-history') || []
+      // if (this.user) {
+      //   const { data } = await getSearchHistory()
+      //   searchHistory = Array.from(new Set([...searchHistory, ...data.data.keywords]))
+      // }
+      this.history = searchHistory
+      // setToken('search-history', searchHistory)
+      // // console.log(searchHistory)
+    },
+    // 删除所有的历史记录
+    async deleteHistoryAll (data) {
+      // 如果登陆的话就把登录的历史记录都删除
+      if (this.user) {
+        await deleteSearchHistory()
+      }
+      this.history = data
     }
   },
-  created () {},
+  created () {
+    this.loadHistory()
+  },
   mounted () {}
 }
 </script>

@@ -28,8 +28,7 @@ export default {
       loading: false,
       finished: false,
       page: 1,
-      per_page: 10,
-      history: []
+      per_page: 10
     }
   },
   computed: {},
@@ -43,7 +42,7 @@ export default {
         per_page: this.per_page,
         q: this.articleText
       })
-      console.log(data)
+      // console.log(data)
       this.list.push(...data.data.results)
       // for (let i = 0; i < 10; i++) {
       //   this.list.push(this.list.length + 1)
