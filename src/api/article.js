@@ -97,3 +97,22 @@ export const articleComment = params => {
     params
   })
 }
+
+// 对评论或评论回复点赞
+export const likingComment = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/comment/likings',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消对评论或评论回复点赞
+export const nolikingComment = target => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/comment/likings/${target}`
+  })
+}

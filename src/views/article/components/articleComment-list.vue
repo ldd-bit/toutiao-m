@@ -7,13 +7,14 @@
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <van-cell v-for="(item,i) in commentList" :key="i" :title="item.content" />
+    <comment-item v-for="(item, i) in commentList" :key="i" :commentItem="item"/>
   </van-list>
 </div>
 </template>
 
 <script>
 import { articleComment } from '@/api/article'
+import CommentItem from './articleComment-item'
 export default {
   name: 'CommentList',
   props: {
@@ -22,7 +23,9 @@ export default {
       required: true
     }
   },
-  components: {},
+  components: {
+    CommentItem
+  },
   data () {
     return {
       commentList: [],
