@@ -42,3 +42,11 @@ export const deleteSearchHistory = () => {
     url: '/app/v1_0/search/histories'
   })
 }
+
+// 获取文章详情
+export const getArticleItem = articleId => {
+  return request({
+    methods: 'GET',
+    url: `/app/v1_0/articles/${articleId}`
+  })
+}

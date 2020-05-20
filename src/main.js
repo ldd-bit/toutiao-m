@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 // 加载Vant组件库
-import Vant from 'vant'
+import Vant, { Lazyload } from 'vant'
 
 // 加载Vant组件库样式
 import 'vant/lib/index.css'
@@ -17,7 +17,9 @@ import './utils/day'
 // 全局注册Vant中的组件
 Vue.use(Vant)
 Vue.config.productionTip = false
-
+Vue.use(Lazyload, {
+  lazyComponent: true
+})
 new Vue({
   router,
   store,
