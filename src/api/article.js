@@ -98,6 +98,15 @@ export const articleComment = params => {
   })
 }
 
+// 添加文章评论
+export const addArticleComment = data => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/comments',
+    data
+  })
+}
+
 // 对评论或评论回复点赞
 export const likingComment = target => {
   return request({

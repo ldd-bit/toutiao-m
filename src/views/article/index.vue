@@ -38,17 +38,24 @@
     </div>
     <!-- <div class="articleOver">正文结束</div> -->
     <!-- 文章评论开始 -->
-    <comment-list :source="articleId"/>
+    <comment-list :source="articleId" :commentList="commentList"/>
     <!-- 文章评论结束 -->
   </div>
   <!-- 文章详情内容结束 -->
+  <!-- 底部菜单栏开始 -->
   <van-tabbar class="box">
-    <van-button type="default" class="comment" round>评论</van-button>
+    <van-button type="default" class="comment" round @click="show = true">评论</van-button>
     <van-tabbar-item icon="comment-o" badge="20"></van-tabbar-item>
     <van-tabbar-item @click="onStart" :class="articleMsg.is_collected?'start':''" :icon="articleMsg.is_collected?'star':'star-o'"></van-tabbar-item>
     <van-tabbar-item @click="onGoodJob" :class="articleMsg.attitude===1?'goodjob':''" :icon="articleMsg.attitude===1?'good-job':'good-job-o'"></van-tabbar-item>
     <van-tabbar-item icon="share"></van-tabbar-item>
   </van-tabbar>
+  <!-- 底部菜单栏结束 -->
+  <!-- 评论弹出层开始 -->
+  <van-popup v-model="show" position="bottom">
+    <comment-reply :articleId="articleId" @addCommentItem="addCommentItem" :addItem="addItem"/>
+  </van-popup>
+  <!-- 评论弹出层结束 -->
 </div>
 </template>
 
@@ -59,6 +66,7 @@ import { ImagePreview } from 'vant' // 加载图片预览
 import { followUser, cancelUser } from '@/api/user'
 import { mapState } from 'vuex'
 import CommentList from './components/articleComment-list'
+import CommentReply from './components/comment-reply'
 export default {
   name: 'articleDetails',
   props: {
@@ -68,12 +76,16 @@ export default {
     }
   },
   components: {
-    CommentList
+    CommentList,
+    CommentReply
   },
   data () {
     return {
       articleMsg: {},
-      idLoading: false
+      idLoading: false,
+      show: false,
+      addItem: {},
+      commentList: []
     }
   },
   computed: {
@@ -154,6 +166,11 @@ export default {
       } else {
         this.$router.push('/login')
       }
+    },
+    // 添加评论
+    addCommentItem (event) {
+      this.commentList.unshift(event.data)
+      this.show = event.false
     }
   },
   created () {

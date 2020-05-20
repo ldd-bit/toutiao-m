@@ -21,6 +21,10 @@ export default {
     source: {
       type: [Number, String, Object],
       required: true
+    },
+    commentList: {
+      type: Array,
+      required: true
     }
   },
   components: {
@@ -28,7 +32,6 @@ export default {
   },
   data () {
     return {
-      commentList: [],
       loading: false,
       finished: false,
       offset: null,
@@ -37,7 +40,8 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+  },
   // 方法集合
   methods: {
     async onLoad () {
