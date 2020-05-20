@@ -9,7 +9,7 @@
   />
   <!-- 头部结束 -->
   <!-- 文章详情内容开始 -->
-  <div class="articleList">
+  <div class="articleList fixed">
     <div class="articleTitle">{{articleMsg.title}}</div>
     <van-cell class="articleItem">
       <van-image
@@ -23,20 +23,42 @@
         <div class="autName">{{articleMsg.aut_name}}</div>
         <div class="autTime">{{articleMsg.pubdate}}</div>
       </div>
-      <van-button :type="articleMsg.is_followed?'default':'danger'" :icon="articleMsg.is_followed?'':'plus'" class="attentionButton" round>{{articleMsg.is_followed?'已关注':'关注'}}</van-button>
+      <van-button
+       :type="articleMsg.is_followed?'default':'danger'"
+       :icon="articleMsg.is_followed?'':'plus'"
+       class="attentionButton"
+       round
+       :loading="idLoading"
+       @click="followed"
+      >
+        {{articleMsg.is_followed?'已关注':'关注'}}
+      </van-button>
     </van-cell>
-    <div class="articleContent markdown-body" ref="content" v-html="articleMsg.content" v-lazy="articleMsg.content">
+    <div class="articleContent markdown-body" ref="content" v-html="articleMsg.content">
     </div>
+    <!-- <div class="articleOver">正文结束</div> -->
+    <!-- 文章评论开始 -->
+    <comment-list :source="articleId"/>
+    <!-- 文章评论结束 -->
   </div>
   <!-- 文章详情内容结束 -->
+  <van-tabbar class="box">
+    <van-button type="default" class="comment" round>评论</van-button>
+    <van-tabbar-item icon="comment-o" badge="20"></van-tabbar-item>
+    <van-tabbar-item @click="onStart" :class="articleMsg.is_collected?'start':''" :icon="articleMsg.is_collected?'star':'star-o'"></van-tabbar-item>
+    <van-tabbar-item @click="onGoodJob" :class="articleMsg.attitude===1?'goodjob':''" :icon="articleMsg.attitude===1?'good-job':'good-job-o'"></van-tabbar-item>
+    <van-tabbar-item icon="share"></van-tabbar-item>
+  </van-tabbar>
 </div>
 </template>
 
 <script>
 import './github-markdown.css'
-import { getArticleItem } from '@/api/article'
+import { getArticleItem, collection, notcollection, likings, notlikings } from '@/api/article'
 import { ImagePreview } from 'vant' // 加载图片预览
-
+import { followUser, cancelUser } from '@/api/user'
+import { mapState } from 'vuex'
+import CommentList from './components/articleComment-list'
 export default {
   name: 'articleDetails',
   props: {
@@ -45,13 +67,18 @@ export default {
       required: true
     }
   },
-  components: {},
+  components: {
+    CommentList
+  },
   data () {
     return {
-      articleMsg: {}
+      articleMsg: {},
+      idLoading: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   // 方法集合
   methods: {
@@ -64,7 +91,7 @@ export default {
       this.$nextTick(() => {
         const content = this.$refs.content
         const imgs = content.querySelectorAll('img')
-        console.log(imgs)
+        // console.log(imgs)
         const img = []
         imgs.forEach((item, i) => {
           img.push(item.src)
@@ -74,11 +101,59 @@ export default {
               startPosition: i,
               loop: false
             })
-            console.log(this)
+            // console.log(this)
           }
         })
       })
-      // 给每个img添加点击事件
+    },
+    // 关注按钮添加事件
+    async followed () {
+      this.idLoading = true
+      console.log(this.user)
+      if (this.user) {
+        if (this.articleMsg.is_followed) {
+          // 取消关注
+          await cancelUser(this.articleMsg.aut_id)
+        } else {
+          // 添加关注
+          await followUser(this.articleMsg.aut_id)
+        }
+        this.articleMsg.is_followed = !this.articleMsg.is_followed
+      } else {
+        this.$router.push('/login')
+      }
+      this.idLoading = false
+    },
+    // 收藏事件
+    async onStart () {
+      if (this.user) {
+        if (this.articleMsg.is_collected) {
+          // 取消关注
+          await notcollection(this.articleMsg.art_id.toString())
+        } else {
+          // 添加关注
+          await collection(this.articleMsg.art_id.toString())
+        }
+        this.articleMsg.is_collected = !this.articleMsg.is_collected
+      } else {
+        this.$router.push('/login')
+      }
+    },
+    // 点赞事件
+    async onGoodJob () {
+      if (this.user) {
+        if (this.articleMsg.attitude === 1) {
+          // 取消关注
+          await notlikings(this.articleMsg.art_id.toString())
+          this.articleMsg.attitude = -1
+        } else {
+          // 添加关注
+          await likings(this.articleMsg.art_id.toString())
+          this.articleMsg.attitude = 1
+        }
+      } else {
+        this.$router.push('/login')
+      }
     }
   },
   created () {
@@ -133,6 +208,38 @@ export default {
     /deep/.markdown-body ul {
       list-style: disc;
     }
+    .articleOver {
+      text-align: center;
+      font-size: 16px;
+      color: rgb(150, 151, 153);
+      margin-top: 10px;
+    }
+  }
+  /deep/ .box {
+    display: flex;
+    align-items: center;
+    .comment {
+      width: 140px;
+      height: 23px;
+      margin: 0 15px;
+    }
+    .van-icon-comment-o::before {
+      color: #777777;
+    }
+    .start {
+      color: #f89a05;
+    }
+    .goodjob {
+      color: red;
+    }
+  }
+  .fixed {
+    position: fixed;
+    top: 46px;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    overflow-y: auto;
   }
 }
 </style>

@@ -30,7 +30,7 @@ export const getSearchResult = params => {
 // 获取用户搜索历史
 export const getSearchHistory = () => {
   return request({
-    methods: 'GET',
+    method: 'GET',
     url: '/app/v1_0/search/histories'
   })
 }
@@ -38,7 +38,7 @@ export const getSearchHistory = () => {
 // 删除所有用户搜索历史
 export const deleteSearchHistory = () => {
   return request({
-    methods: 'DELETE',
+    method: 'DELETE',
     url: '/app/v1_0/search/histories'
   })
 }
@@ -46,7 +46,54 @@ export const deleteSearchHistory = () => {
 // 获取文章详情
 export const getArticleItem = articleId => {
   return request({
-    methods: 'GET',
+    method: 'GET',
     url: `/app/v1_0/articles/${articleId}`
+  })
+}
+
+// 收藏文章
+export const collection = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/collections',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消收藏文章
+export const notcollection = articleId => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/collections/${articleId}`
+  })
+}
+
+// 对文章点赞
+export const likings = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/likings',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消点赞文章
+export const notlikings = articleId => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/likings/${articleId}`
+  })
+}
+
+// 获取文章评论
+export const articleComment = params => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/comments',
+    params
   })
 }
