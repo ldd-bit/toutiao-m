@@ -38,14 +38,14 @@
     </div>
     <!-- <div class="articleOver">正文结束</div> -->
     <!-- 文章评论开始 -->
-    <comment-list :source="articleId" :commentList="commentList"/>
+    <comment-list :source="articleId" :commentList="commentList" @totalCount="total_count=$event"/>
     <!-- 文章评论结束 -->
   </div>
   <!-- 文章详情内容结束 -->
   <!-- 底部菜单栏开始 -->
   <van-tabbar class="box">
     <van-button type="default" class="comment" round @click="show = true">评论</van-button>
-    <van-tabbar-item icon="comment-o" badge="20"></van-tabbar-item>
+    <van-tabbar-item icon="comment-o" :badge="total_count"></van-tabbar-item>
     <van-tabbar-item @click="onStart" :class="articleMsg.is_collected?'start':''" :icon="articleMsg.is_collected?'star':'star-o'"></van-tabbar-item>
     <van-tabbar-item @click="onGoodJob" :class="articleMsg.attitude===1?'goodjob':''" :icon="articleMsg.attitude===1?'good-job':'good-job-o'"></van-tabbar-item>
     <van-tabbar-item icon="share"></van-tabbar-item>
@@ -53,7 +53,7 @@
   <!-- 底部菜单栏结束 -->
   <!-- 评论弹出层开始 -->
   <van-popup v-model="show" position="bottom">
-    <comment-reply :articleId="articleId" @addCommentItem="addCommentItem" :addItem="addItem"/>
+    <comment-reply :articleId="articleId" @addCommentItem="addCommentItem"/>
   </van-popup>
   <!-- 评论弹出层结束 -->
 </div>
@@ -84,8 +84,8 @@ export default {
       articleMsg: {},
       idLoading: false,
       show: false,
-      addItem: {},
-      commentList: []
+      commentList: [],
+      total_count: 0
     }
   },
   computed: {
@@ -170,6 +170,7 @@ export default {
     // 添加评论
     addCommentItem (event) {
       this.commentList.unshift(event.data)
+      this.total_count++
       this.show = event.false
     }
   },

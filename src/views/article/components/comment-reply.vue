@@ -9,7 +9,7 @@
     show-word-limit
   >
     <template #button>
-      <van-button size="small" type="primary" @click="publishComment" >发布</van-button>
+      <van-button size="small" type="primary" @click="publishComment" :disabled="message?false:true">发布</van-button>
     </template>
   </van-field>
 </div>
@@ -37,13 +37,17 @@ export default {
   // 方法集合
   methods: {
     async publishComment () {
-      const { data } = await addArticleComment({
-        target: this.articleId.toString(),
-        content: this.message,
-        art_id: this.art_id
-      })
-      console.log(data.data)
-      this.$emit('addCommentItem', { data: data.data.new_obj, false: false })
+      if (this.message.trim()) {
+        const { data } = await addArticleComment({
+          target: this.articleId.toString(),
+          content: this.message,
+          art_id: this.art_id
+        })
+        console.log(data.data)
+        this.$emit('addCommentItem', { data: data.data.new_obj, false: false })
+        this.message = ''
+        this.$toast.success('发布评论成功')
+      }
     }
   },
   created () {},

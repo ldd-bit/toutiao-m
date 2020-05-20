@@ -35,8 +35,7 @@ export default {
       loading: false,
       finished: false,
       offset: null,
-      limit: 10,
-      total_count: 0
+      limit: 10
     }
   },
   computed: {},
@@ -55,7 +54,7 @@ export default {
       })
       console.log(data)
       this.commentList.push(...data.data.results)
-      this.total_count = data.data.total_count
+      this.$emit('totalCount', data.data.total_count)
       // // 加载状态结束
       this.loading = false
       // // 数据全部加载完成
