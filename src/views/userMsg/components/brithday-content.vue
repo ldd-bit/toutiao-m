@@ -36,6 +36,11 @@ export default {
   // 方法集合
   methods: {
     async changeDate (value) {
+      this.$toast.loading({
+        message: '上传中...',
+        forbidClick: true,
+        duration: 0
+      })
       const date = dayjs(value).format('YYYY-MM-DD')
       // console.log(date)
       await editUserInfo({
@@ -44,6 +49,7 @@ export default {
       })
       this.$emit('input', date)
       this.$emit('close')
+      this.$toast.success('上传成功')
     }
   },
   created () {},

@@ -32,11 +32,17 @@ export default {
   // 方法集合
   methods: {
     async onConfirm (value, index) {
+      this.$toast.loading({
+        message: '上传中...',
+        forbidClick: true,
+        duration: 0
+      })
       await editUserInfo({
         gender: index
       })
       this.$emit('input', index)
       this.$emit('close')
+      this.$toast.success('上传成功')
     }
   },
   created () {},
