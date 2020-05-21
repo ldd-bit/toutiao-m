@@ -37,8 +37,11 @@ export default {
   methods: {
     async changeDate (value) {
       const date = dayjs(value).format('YYYY-MM-DD')
-      console.log(date)
-      await editUserInfo(date)
+      // console.log(date)
+      await editUserInfo({
+        birthday: date
+
+      })
       this.$emit('input', date)
       this.$emit('close')
     }
