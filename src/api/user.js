@@ -75,3 +75,20 @@ export const cancelUser = target => {
     url: `/app/v1_0/user/followings/${target}`
   })
 }
+
+// 获取个人资料
+export const getUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user/profile'
+  })
+}
+
+// 修改个人资料
+export const editUserInfo = data => {
+  return request({
+    method: 'PATCH',
+    url: '/app/v1_0/user/profile',
+    data
+  })
+}

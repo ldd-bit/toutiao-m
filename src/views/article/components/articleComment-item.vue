@@ -19,7 +19,7 @@
       <div class="commentContent">{{commentItem.content}}</div>
       <div>
         <span>{{commentItem.pubdate | relativeTime}}</span>
-        <van-button type="default" round class="commentReply">回复{{commentItem.reply_count}}</van-button>
+        <van-button @click="$emit('replyShow', true)" type="default" round class="commentReply">回复{{commentItem.reply_count}}</van-button>
       </div>
     </div>
   </van-cell>
@@ -39,6 +39,7 @@ export default {
   components: {},
   data () {
     return {
+      show: false
     }
   },
   computed: {},

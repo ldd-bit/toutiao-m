@@ -7,7 +7,7 @@
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <comment-item v-for="(item, i) in commentList" :key="i" :commentItem="item"/>
+    <comment-item v-for="(item, i) in commentList" :key="i" :commentItem="item" @replyShow="$emit('replyShow',$event)"/>
   </van-list>
 </div>
 </template>

@@ -38,7 +38,7 @@
     </div>
     <!-- <div class="articleOver">正文结束</div> -->
     <!-- 文章评论开始 -->
-    <comment-list :source="articleId" :commentList="commentList" @totalCount="total_count=$event"/>
+    <comment-list @replyShow="replyShow=$event" :source="articleId" :commentList="commentList" @totalCount="total_count=$event"/>
     <!-- 文章评论结束 -->
   </div>
   <!-- 文章详情内容结束 -->
@@ -51,11 +51,17 @@
     <van-tabbar-item icon="share"></van-tabbar-item>
   </van-tabbar>
   <!-- 底部菜单栏结束 -->
-  <!-- 评论弹出层开始 -->
+  <!-- 发布评论弹出层开始 -->
   <van-popup v-model="show" position="bottom">
     <comment-reply :articleId="articleId" @addCommentItem="addCommentItem"/>
   </van-popup>
-  <!-- 评论弹出层结束 -->
+  <!-- 发布评论弹出层结束 -->
+  <!-- 评论回复弹出层开始 -->
+  <van-popup v-model="replyShow" position="bottom" :style="{ height: '90%' }" >
+    <comment-publish/>
+  </van-popup>
+  <!-- 评论回复弹出层结束 -->
+
 </div>
 </template>
 
@@ -67,6 +73,7 @@ import { followUser, cancelUser } from '@/api/user'
 import { mapState } from 'vuex'
 import CommentList from './components/articleComment-list'
 import CommentReply from './components/comment-reply'
+import CommentPublish from './components/comment-publish'
 export default {
   name: 'articleDetails',
   props: {
@@ -77,7 +84,8 @@ export default {
   },
   components: {
     CommentList,
-    CommentReply
+    CommentReply,
+    CommentPublish
   },
   data () {
     return {
@@ -85,7 +93,8 @@ export default {
       idLoading: false,
       show: false,
       commentList: [],
-      total_count: 0
+      total_count: 0,
+      replyShow: false
     }
   },
   computed: {

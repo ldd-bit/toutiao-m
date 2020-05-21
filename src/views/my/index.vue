@@ -15,6 +15,7 @@
         type="default"
         size="small"
         round
+        to="/user/profile"
       >
         编辑资料
       </van-button>
