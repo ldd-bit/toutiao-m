@@ -23,6 +23,10 @@ export default {
     articleId: {
       type: [Number, String, Object],
       required: true
+    },
+    target: {
+      type: [Number, String, Object],
+      default: null
     }
   },
   components: {},
@@ -41,7 +45,7 @@ export default {
         const { data } = await addArticleComment({
           target: this.articleId.toString(),
           content: this.message,
-          art_id: this.art_id
+          art_id: this.target
         })
         console.log(data.data)
         this.$emit('addCommentItem', { data: data.data.new_obj, false: false })

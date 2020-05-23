@@ -19,7 +19,7 @@
       <div class="commentContent">{{commentItem.content}}</div>
       <div>
         <span>{{commentItem.pubdate | relativeTime}}</span>
-        <van-button @click="$emit('replyShow', true)" type="default" round class="commentReply">回复{{commentItem.reply_count}}</van-button>
+        <van-button @click="$emit('replyShow')" type="default" round class="commentReply">回复{{commentItem.reply_count}}</van-button>
       </div>
     </div>
   </van-cell>
@@ -62,46 +62,39 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.articleList {
-  background-color: white;
-  .articleTitle {
-    padding: 14px 14px 5px;
-    font-size: 18px;
-    font-weight: 700;
+.articleItem {
+  .artImage {
+    width:40px;
+    height:40px;
+    margin-right: 10px;
   }
-  .articleItem {
-    .artImage {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
-    .autName {
-      font-size: 14px;
-      color: #333333;
+  .autName {
+    font-size: 14px;
+    color: #333333;
+    display: flex;
+    justify-content: space-between;
+    .center {
       display: flex;
-      justify-content: space-between;
-      .center {
+      .van-icon {
         display: flex;
-        .van-icon {
-          display: flex;
-          align-self: center;
-        }
+        align-self: center;
       }
     }
-    .autTime {
+  }
+  .autTime {
+    font-size: 12px;
+    color: #b4b4b4;
+    .commentContent {
+      margin: 10px 0;
+    }
+    .commentReply {
+      margin-left: 12px;
       font-size: 12px;
-      color: #b4b4b4;
-      .commentContent {
-        margin: 10px 0;
-      }
-      .commentReply {
-        margin-left: 12px;
-        font-size: 12px;
-        width: 65px;
-        height: 24px;
-        background-color: #f4f5f6;
-      }
+      width: 65px;
+      height: 24px;
+      background-color: #f4f5f6;
     }
   }
 }
+
 </style>

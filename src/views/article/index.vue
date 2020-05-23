@@ -38,7 +38,7 @@
     </div>
     <!-- <div class="articleOver">正文结束</div> -->
     <!-- 文章评论开始 -->
-    <comment-list @replyShow="replyShow=$event" :source="articleId" :commentList="commentList" @totalCount="total_count=$event"/>
+    <comment-list @replyShow="reply($event)" :source="articleId" :commentList="commentList" type="a" @totalCount="total_count=$event"/>
     <!-- 文章评论结束 -->
   </div>
   <!-- 文章详情内容结束 -->
@@ -58,7 +58,7 @@
   <!-- 发布评论弹出层结束 -->
   <!-- 评论回复弹出层开始 -->
   <van-popup v-model="replyShow" position="bottom" :style="{ height: '90%' }" >
-    <comment-publish/>
+    <comment-publish :articleId="articleId" v-if="replyShow" :commitItem="commitItem" @false="replyShow=false"/>
   </van-popup>
   <!-- 评论回复弹出层结束 -->
 
@@ -94,7 +94,8 @@ export default {
       show: false,
       commentList: [],
       total_count: 0,
-      replyShow: false
+      replyShow: false,
+      commitItem: {}
     }
   },
   computed: {
@@ -181,6 +182,10 @@ export default {
       this.commentList.unshift(event.data)
       this.total_count++
       this.show = event.false
+    },
+    reply (value) {
+      this.replyShow = true
+      this.commitItem = value
     }
   },
   created () {

@@ -7,7 +7,7 @@
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <comment-item v-for="(item, i) in commentList" :key="i" :commentItem="item" @replyShow="$emit('replyShow',$event)"/>
+    <comment-item v-for="(item, i) in commentList" :key="i" :commentItem="item" @replyShow="$emit('replyShow',item)"/>
   </van-list>
 </div>
 </template>
@@ -24,6 +24,10 @@ export default {
     },
     commentList: {
       type: Array,
+      required: true
+    },
+    type: {
+      type: String,
       required: true
     }
   },
@@ -47,7 +51,7 @@ export default {
       // 异步更新数据
       // 获取文章评论数据
       const { data } = await articleComment({
-        type: 'a',
+        type: this.type,
         source: this.source.toString(),
         offset: this.offset,
         limit: this.limit
