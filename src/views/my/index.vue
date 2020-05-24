@@ -50,7 +50,7 @@
     <van-grid-item icon-prefix="toutiao" icon="lishi" text="历史" />
   </van-grid>
   <van-cell title="消息通知" is-link />
-  <van-cell title="小智同学" is-link class="marBotttom4px"/>
+  <van-cell title="小智同学" to="/chat" is-link class="marBotttom4px"/>
   <van-cell title="退出登录" v-if="user && currentInfo" class="titleCenter" @click="exitLogin"/>
 </div>
 </template>
